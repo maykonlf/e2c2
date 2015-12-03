@@ -31,7 +31,7 @@ class E2C2(Logger):
 
     def get_public_key(self, user):
         self.logger.info("Get public key by %s" % user)
-        return self.users[user]
+        return self.users[user].replace("\n", "").strip()
 
     def get_host(self, instance):
         self.logger.info("Get host by %s" % instance)
