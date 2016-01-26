@@ -82,23 +82,22 @@ class E2C2(Logger):
             self.logger.debug("CREATE_USER_ON_INSTANCE:\n%s" % command)
 
             self.execute_shell_command(command)
-
-            command = self.CREATE_DIR.format(
-                USER=user,
-                SSH_DIR=self.SSH_DIR.format(USER=user),
-                PEM_PATH=self.get_pem_file(instance),
-                INSTANCE=self.get_host(instance)
-            )
-            self.logger.debug("CREATE_DIR:\n%s" % command)
-
-            self.execute_shell_command(command)
+        command = self.CREATE_DIR.format(
+            USER=user,
+            SSH_DIR=self.SSH_DIR.format(USER=user),
+            PEM_PATH=self.get_pem_file(instance),
+            INSTANCE=self.get_host(instance)
+        )
+        result = self.execute_shell_command(command)
+        self.logger.debug("CREATE_DIR:\n%s\n result:%s" % (command, result))
         command = self.CHANGE_HOME_DIR_OWNER.format(
             USER=user,
             HOME_DIR=self.HOME_DIR.format(USER=user),
             PEM_PATH=self.get_pem_file(instance),
             INSTANCE=self.get_host(instance)
         )
-        self.logger.debug("CHANGIND_HOME_DIR_OWNER:\n%s" % command)
+        result = self.execute_shell_command(command)
+        self.logger.debug("CHANGE_HOME_DIR_OWNER\n%s\n result:%s" % (command, result))
 
     def add_user_key_to_instance(self, user, instance):
 
