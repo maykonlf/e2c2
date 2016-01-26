@@ -11,7 +11,9 @@ class E2C2(Logger):
     HOME_DIR = '/home/{USER}/'
     SSH_DIR = '/home/{USER}/.ssh'
     CREATE_DIR = "ssh -i {PEM_PATH} {INSTANCE} \
-    'sudo -u {USER} mkdir -p {SSH_DIR}'"
+    'sudo mkdir -p {SSH_DIR}'"
+    CHANGE_HOME_DIR_OWNER = "ssh -i {PEM_PATH} {INSTANCE} \
+    'sudo chown -R {USER}:{USER} {HOME_DIR}'"
     ADD_USER_KEY_TO_AUTHORIZED_KEYS = "ssh -i {PEM_PATH} {INSTANCE} \"sudo -u {USER} sh -c \'echo \"{USER_KEY}\" >> {SSH_DIR}/authorized_keys\'\""
     CHECK_USER_EXISTS = "ssh -i {PEM_PATH} {INSTANCE} 'cut -d: -f1 /etc/passwd | grep {USER}'"
     DELETE_USER_ON_INSTANCE = "ssh -i {PEM_PATH} {INSTANCE} 'sudo userdel -r {USER}'"
@@ -90,6 +92,13 @@ class E2C2(Logger):
             self.logger.debug("CREATE_DIR:\n%s" % command)
 
             self.execute_shell_command(command)
+        command = self.CHANGE_HOME_DIR_OWNER.format(
+            USER=user,
+            HOME_DIR=self.HOME_DIR.format(USER=user),
+            PEM_PATH=self.get_pem_file(instance),
+            INSTANCE=self.get_host(instance)
+        )
+        self.logger.debug("CHANGIND_HOME_DIR_OWNER:\n%s" % command)
 
     def add_user_key_to_instance(self, user, instance):
 
