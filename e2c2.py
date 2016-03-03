@@ -6,7 +6,7 @@ import os
 
 
 class E2C2(Logger):
-    CREATE_USER_ON_INSTANCE = "ssh -i {PEM_PATH} {INSTANCE} 'sudo useradd {USER}; sudo passwd -d {USER}'"
+    CREATE_USER_ON_INSTANCE = "ssh -i {PEM_PATH} {INSTANCE} 'sudo useradd {USER}; sudo passwd -d {USER}; sudo mkdir /home/{USER};sudo chown {USER}:{USER} /home/{USER}'"
     ADD_USER_TO_SUDOERS_GROUP = "ssh -i {PEM_PATH} {INSTANCE} 'sudo usermod -a -G sudo {USER}'"
     HOME_DIR = '/home/{USER}/'
     SSH_DIR = '/home/{USER}/.ssh'
